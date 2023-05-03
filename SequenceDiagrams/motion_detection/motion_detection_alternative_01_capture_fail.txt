@@ -1,0 +1,21 @@
+@startuml
+
+actor	": User" as User
+participant	": Sensor" as Sensor
+control		": RedisWorker" as RedisWorker
+control		": Redis" as Redis
+
+User -> Sensor : capture_data()
+Sensor --> User : return CaptureError
+
+User -> Sensor : capture_data()
+Sensor -> RedisWorker : parse_data(data)
+RedisWorker -> RedisWorker : verify(data)
+RedisWorker -> RedisWorker : add_timestamp(data)
+RedisWorker -> Redis : publish(data)
+
+Redis --> RedisWorker
+RedisWorker --> Sensor
+Sensor --> User
+
+@enduml
