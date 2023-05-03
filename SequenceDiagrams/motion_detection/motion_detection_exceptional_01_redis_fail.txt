@@ -4,12 +4,16 @@ actor	": User" as User
 participant	": Sensor" as Sensor
 control		": RedisWorker" as RedisWorker
 control		": Redis" as Redis
+control		": SCADA" as Scada
 
 User -> Sensor : capture_data()
 Sensor -> RedisWorker : parse_data(data)
 RedisWorker -> RedisWorker : verify(data)
 RedisWorker -> RedisWorker : add_timestamp(data)
 RedisWorker -> Redis : publish(data)
+Redis -> Redis : notify_subscribers()
+Redis -> Scada : update()
+Scada -> Redis : get_motion_data()
 
 Redis --> RedisWorker : return RedisServerNotFoundError
 RedisWorker --> Sensor : return RedisServerNotFoundError
