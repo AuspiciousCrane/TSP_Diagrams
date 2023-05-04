@@ -1,0 +1,11 @@
+@startuml
+
+actor		": User" as User
+boundary	": UserInterface" as UserInterface
+
+User -> UserInterface : render(data)
+UserInterface -> UserInterface : load_model()
+UserInterface -> UserInterface : initialize_bones()
+UserInterface --> User
+
+@enduml
