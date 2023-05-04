@@ -8,7 +8,6 @@ control		": SCADA" as Scada
 
 User -> Sensor : capture_data()
 Sensor -> RedisWorker : parse_data(data)
-RedisWorker -> RedisWorker : verify(data)
 RedisWorker -> RedisWorker : add_timestamp(data)
 RedisWorker -> Redis : publish(data)
 
@@ -18,7 +17,6 @@ Sensor --> User : return PublishError
 
 User -> Sensor : capture_data()
 Sensor -> RedisWorker : parse_data(data)
-RedisWorker -> RedisWorker : verify(data)
 RedisWorker -> RedisWorker : add_timestamp(data)
 RedisWorker -> Redis : publish(data)
 Redis -> Redis : notify_subscribers()

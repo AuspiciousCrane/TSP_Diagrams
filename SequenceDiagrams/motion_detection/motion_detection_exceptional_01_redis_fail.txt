@@ -7,7 +7,6 @@ control		": Redis" as Redis
 
 User -> Sensor : capture_data()
 Sensor -> RedisWorker : parse_data(data)
-RedisWorker -> RedisWorker : verify(data)
 RedisWorker -> RedisWorker : add_timestamp(data)
 RedisWorker -> Redis : publish(data)
 

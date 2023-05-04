@@ -1,0 +1,98 @@
+@startuml
+
+' Defining Packages
+
+
+' Defining Interfaces
+
+interface Worker {
+    - listener_protocol: Protocol
+    - transmitter_protocol: Protocol
+    + init()
+}
+
+interface Protocol {}
+
+interface Timestamp {
+    + set_timestamp()
+    + set_timestamp_default()
+}
+
+
+' Defining Protocols
+protocol UDP
+protocol RedisPubSub
+protocol WebSocket
+
+
+' Defining Structs
+struct Sensor {
+    - transmission_protocol: Protocol
+    + capture_data()
+}
+
+
+' Defining Classes
+class RedisWorker {
+    + parse_data(data: String)
+    - add_timestamp(data: Timestamp)
+}
+
+class LocationWorker {
+    + update()
+    - trilaterate_from_data()
+}
+
+class Redis {
+    + publish(data: String)
+    + authenticate(password: String) : String
+    + get_motion_data() : String
+    + get_range_data() : String
+    + get_coordinate_data() String
+    + get_data() : String
+
+    - notify_subscribers()
+}
+
+class SCADA {
+    + update()
+    + authenticate(username: String, password: String) : String
+}
+
+class UserInterface {
+    - data_protocol: Protocol
+
+    + initialize_system()
+    + render(data: String)
+    + login(username: String, password: String)
+
+    - load_model()
+    - initialize_bones()
+}
+
+
+' Defining Relationship of Protocols
+
+Protocol <|-- UDP
+Protocol <|-- RedisPubSub
+Protocol <|-- WebSocket
+
+RedisPubSub o-- Redis
+
+Worker o-- Protocol
+UserInterface o-- Protocol
+Sensor o-- Protocol
+
+
+' Defining Relationship of Interfaces
+RedisWorker *-- Timestamp
+
+
+' Defining Relationship of Classes
+
+Worker <|-- RedisWorker
+Worker <|-- LocationWorker
+
+SCADA o-- Redis
+
+@enduml
