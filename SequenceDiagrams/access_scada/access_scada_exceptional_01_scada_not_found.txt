@@ -1,0 +1,12 @@
+@startuml
+
+actor	": User" as User
+boundary	": UserInterface" as UserInterface
+control		": SCADA" as Scada
+
+User -> UserInterface : login(username, password)
+UserInterface -> Scada : authenticate(username, password)
+Scada --> UserInterface : return ScadaNotFoundError
+UserInterface --> User : return ScadaNotFoundError
+
+@enduml

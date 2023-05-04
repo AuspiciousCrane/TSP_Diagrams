@@ -1,0 +1,13 @@
+@startuml
+
+actor	": User" as User
+boundary	": UserInterface" as UserInterface
+control		": SCADA" as Scada
+
+User -> UserInterface : login(username, password)
+UserInterface -> Scada : authenticate(username, password)
+Scada --> UserInterface : return token
+UserInterface -> UserInterface : init_websocket(token)
+UserInterface --> User
+
+@enduml
