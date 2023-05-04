@@ -6,7 +6,7 @@ control		": Worker" as Worker
 control		": Redis" as Redis
 
 User -> UserInterface : initialize_system()
-UserInterface -> Worker : initialize_workers()
+UserInterface -> Worker : init()
 Worker -> Redis : authenticate(password)
 Redis --> Worker
 Worker --> UserInterface
