@@ -1,0 +1,38 @@
+@startuml
+
+actor	": User" as User
+participant ": Sensor" as Sensor
+control	": RedisWorker" as RedisWorker
+control ": LocationWorker" as LocationWorker
+control ": Redis" as Redis
+control ": SCADA" as Scada
+
+User -> Sensor : capture_data()
+Sensor -> RedisWorker : parse_data(data)
+RedisWorker -> RedisWorker : add_timestamp(data)
+RedisWorker -> Redis : publish(data)
+Redis --> RedisWorker : return PublishError
+RedisWorker --> Sensor : return PublishError
+Sensor --> User : return PublishError
+
+User -> Sensor : capture_data()
+Sensor -> RedisWorker : parse_data(data)
+RedisWorker -> RedisWorker : add_timestamp(data)
+RedisWorker -> Redis : publish(data)
+Redis -> Redis : notify_subscribers()
+Redis -> Scada : update()
+Scada -> Redis : get_range_data()
+Redis -> LocationWorker : update()
+LocationWorker -> Redis : get_range_data()
+LocationWorker -> LocationWorker : trilaterate_from_data()
+LocationWorker -> Redis : publish(data)
+Redis -> Redis : notify_subscribers()
+Redis -> Scada : update()
+Scada -> Redis : get_coordinate_data()
+
+Redis --> LocationWorker
+LocationWorker --> RedisWorker
+RedisWorker --> Sensor
+Sensor --> User
+
+@enduml
