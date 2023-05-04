@@ -1,0 +1,14 @@
+@startuml
+
+control		": Redis" as Redis
+control		": SCADA" as Scada
+boundary	": UserInterface" as UserInterface
+
+Redis -> Redis : notify_subscribers()
+Redis -> Scada : update()
+Scada -> Redis : get_data()
+Scada -> UserInterface : render(data)
+UserInterface --> Scada
+Scada --> Redis
+
+@enduml
