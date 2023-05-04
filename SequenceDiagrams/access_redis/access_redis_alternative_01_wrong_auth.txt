@@ -1,0 +1,18 @@
+@startuml
+
+actor		": User" as User
+boundary	": UserInterface" as UserInterface
+control		": Worker" as Worker
+control		": Redis" as Redis
+
+User -> UserInterface : initialize_system()
+UserInterface -> Worker : initialize_workers()
+Worker -> Redis : authenticate(password)
+Redis --> Worker : return WrongAuthError
+Worker -> Redis : authenticate(new_password)
+Redis --> Worker
+Worker --> UserInterface
+UserInterface --> User
+
+
+@enduml
