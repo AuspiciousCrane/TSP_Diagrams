@@ -1,7 +1,7 @@
 @startuml
 
 actor	": User" as User
-control ": Sensor" as Sensor
+participant ": Sensor" as Sensor
 control	": RedisWorker" as RedisWorker
 control ": LocationWorker" as LocationWorker
 control ": Redis" as Redis
